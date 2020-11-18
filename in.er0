@@ -1,0 +1,33 @@
+units			metal
+boundary		f f p
+atom_style		atomic
+timestep		0.005
+
+read_data		m112.data
+
+pair_style		eam/alloy
+pair_coeff		* * ../CuYM.eam.alloy Cu Cu
+
+variable		E equal pe
+run			0
+compute			pe all pe/atom
+
+region			mid block -120 120 -25 25 INF INF
+group			mid region mid
+group			fixb subtract all mid
+set			group fixb type 2
+thermo			10
+
+compute			pea all pe/atom
+compute			apem mid reduce sum c_pea
+
+thermo_style		custom step temp pe c_apem
+
+velocity		fixb set 0 0 0
+fix			1 fixb setforce 0 0 0
+dump			1 all custom 200 er*.xyz id type x y z c_pea
+dump_modify		1 sort id
+minimize		1e-15 1e-15 1000 1000
+
+print 			"^^^The mid potential energy is now $(c_apem)"
+run			0
