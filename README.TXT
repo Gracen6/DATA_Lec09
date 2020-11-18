@@ -6,3 +6,4 @@ r25.xyz: SPP boundary condition
 1100.cfg: perfect Cu without dislocation, in cfg format
 er0.xyz: edge, unrelaxed
 er248.xyz: edge, relaxed core
+rste0.xyz: 1/2<110>{001} edge dislocation in TiC
